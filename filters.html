@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Filter</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .filter-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        .filter-container select, .filter-container input {
+            padding: 10px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .filter-container button {
+            padding: 10px 20px;
+            font-size: 14px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .filter-container button:hover {
+            background-color: #0056b3;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        table th, table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: left;
+        }
+        table th {
+            background-color: #f4f4f4;
+        }
+    </style>
+</head>
+<body>
+    <h1>Inventory System</h1>
+
+    <div class="filter-container">
+        <!-- Dropdown for category -->
+        <select id="categoryFilter">
+            <option value="">All Categories</option>
+            <option value="electronics">Electronics</option>
+            <option value="furniture">Furniture</option>
+            <option value="stationery">Stationery</option>
+        </select>
+
+        <!-- Dropdown for status -->
+        <select id="statusFilter">
+            <option value="">All Statuses</option>
+            <option value="available">Available</option>
+            <option value="out_of_stock">Out of Stock</option>
+            <option value="reserved">Reserved</option>
+        </select>
+
+        <!-- Search bar -->
+        <input type="text" id="searchFilter" placeholder="Search by item name">
+
+        <!-- Filter button -->
+        <button onclick="applyFilter()">Filter</button>
+    </div>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Item Name</th>
+                <th>Category</th>
+                <th>Status</th>
+                <th>Quantity</th>
+            </tr>
+        </thead>
+        <tbody id="inventoryTable">
+            <tr>
+                <td>Desk Chair</td>
+                <td>Furniture</td>
+                <td>Available</td>
+                <td>15</td>
+            </tr>
+            <tr>
+                <td>Notebook</td>
+                <td>Stationery</td>
+                <td>Out of Stock</td>
+                <td>0</td>
+            </tr>
+            <tr>
+                <td>Monitor</td>
+                <td>Electronics</td>
+                <td>Available</td>
+                <td>10</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        function applyFilter() {
+            const categoryFilter = document.getElementById('categoryFilter').value.toLowerCase();
+            const statusFilter = document.getElementById('statusFilter').value.toLowerCase();
+            const searchFilter = document.getElementById('searchFilter').value.toLowerCase();
+
+            const rows = document.querySelectorAll('#inventoryTable tr');
+            rows.forEach(row => {
+                const cells = row.querySelectorAll('td');
+                const itemName = cells[0].textContent.toLowerCase();
+                const category = cells[1].textContent.toLowerCase();
+                const status = cells[2].textContent.toLowerCase();
+
+                // Check filters
+                const matchesCategory = !categoryFilter || category.includes(categoryFilter);
+                const matchesStatus = !statusFilter || status.includes(statusFilter);
+                const matchesSearch = !searchFilter || itemName.includes(searchFilter);
+
+                // Show or hide rows based on filters
+                if (matchesCategory && matchesStatus && matchesSearch) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+</html>
